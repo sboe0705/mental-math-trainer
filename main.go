@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -33,20 +32,18 @@ func giveMathProblem(maxNumber int) (int, int) {
 	wrongAnswers := 0
 	thinkingTime := 0
 
-	number1 := maxNumber/2 + rand.Intn(maxNumber/2+1)
-	number2 := maxNumber/2 + rand.Intn(maxNumber/2+1)
-	result := number1 + number2
-	fmt.Printf("Wie viel ist %d + %d = ", number1, number2)
+	task := NewTask(maxNumber)
+	fmt.Printf("Wie viel ist %s", task.Challenge())
 	for {
 		start := time.Now().UnixMilli()
 		answer := readInteger()
 		end := time.Now().UnixMilli()
 		thinkingTime += (int)(end - start)
-		if answer == result {
+		if answer == task.Result() {
 			fmt.Printf("Richtig!\n")
 			return wrongAnswers, thinkingTime
 		}
-		fmt.Printf("Falsch! %d + %d = ", number1, number2)
+		fmt.Printf("Falsch! %s", task.Challenge())
 		wrongAnswers++
 	}
 }
