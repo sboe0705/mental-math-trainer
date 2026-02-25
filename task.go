@@ -47,7 +47,7 @@ func NewTaskWithOperation(operation string, limit int) Task {
 }
 
 func randomOperation() string {
-	ops := []string{"+", "-", "*", "/"}
+	ops := []string{"+", "-", "x", "/"}
 	return ops[rand.Intn(len(ops))]
 }
 
