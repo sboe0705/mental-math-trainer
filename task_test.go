@@ -29,6 +29,17 @@ func assertValidOperation(t *testing.T, operation string) {
 	}
 }
 
+func TestRandomNumber(t *testing.T) {
+	min := 5
+	max := 10
+	for range invocations {
+		number := randomNumber(min, max)
+		if number < min || number > max {
+			t.Fatalf("number %d is not between %d and %d (inclusive)", number, min, max)
+		}
+	}
+}
+
 func TestNewAdditionTask(t *testing.T) {
 	for range invocations {
 		task := newAdditionTask(limit)
