@@ -52,8 +52,8 @@ func randomOperation() string {
 }
 
 func newAdditionTask(limit int) *taskImpl {
-	result := rand.Intn(limit + 1)
-	number1 := 2 + rand.Intn(result + 1 - 2)
+	result := rand.Intn(limit + 1 - 2)
+	number1 := 2 + rand.Intn(result + 1)
 	number2 := result - number1
 	return &taskImpl{number1: number1, operation: "+", number2: number2, result: result}
 }
