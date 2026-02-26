@@ -58,7 +58,7 @@ func newAdditionTask(limit int) *taskImpl {
 	return &taskImpl{number1: number1, operation: "+", number2: number2, result: result}
 }
 
-func randomNumber(min, max int) {
+func randomNumber(min, max int) int {
 	return min + rand.Intn(max + 1 - min)
 }
 
