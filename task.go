@@ -52,10 +52,14 @@ func randomOperation() string {
 }
 
 func newAdditionTask(limit int) *taskImpl {
-	result := 4 + rand.Intn(limit + 1 - 4)
-	number1 := 2 + rand.Intn(result + 1 - 2)
+	result := randomNumber(4, limit)
+	number1 := randomNumber(2, result)
 	number2 := result - number1
 	return &taskImpl{number1: number1, operation: "+", number2: number2, result: result}
+}
+
+func randomNumber(min, max int) {
+	return min + rand.Intn(max + 1 - min)
 }
 
 func newSubtractionTask(limit int) *taskImpl {
