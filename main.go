@@ -7,54 +7,37 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/spf13/pflag"
 )
 
 func main() {
-	count := 20
-	wrongAnswers := 0
-	thinkingTime := 0
+	count := pflag.IntP("count", "c", 20, "Number of problems to generate and solve.")
+	limit := pflag.IntP("limit", "l", 100, "Maximum number used in generated problems.")
+	pflag.Parse()
 
-	fmt.Printf("%d Rechenaufgaben\n", count)
-	fmt.Printf("Höchste Zahl? ")
-	maxNumber := readInteger()
-
-	fmt.Printf("Los geht's!\n")
-	for range count {
-		_wrongAnswers, _thinkingTime := giveMathProblem(maxNumber)
-		wrongAnswers += _wrongAnswers
-		thinkingTime += _thinkingTime
+	mistakes := 0
+	startTime := time.Now().UnixMilli()
+	for range *count {
+		handleTask(*limit, &mistakes)
 	}
+	endTime := time.Now().UnixMilli()
 
-	showStatistics(count, wrongAnswers, float64(thinkingTime))
+	fmt.Printf("You solved %d tasks in %d seconds!\n", *count, (endTime-startTime)/1000)
+	fmt.Printf("You have made %d mistakes.\n", mistakes)
 }
 
-func giveMathProblem(maxNumber int) (int, int) {
-	wrongAnswers := 0
-	thinkingTime := 0
-
-	task := NewTask(maxNumber)
-	fmt.Printf("Wie viel ist %s", task.Challenge())
+func handleTask(limit int, mistakes *int) {
+	task := NewTask(limit)
 	for {
-		start := time.Now().UnixMilli()
+		fmt.Print(task.Challenge())
 		answer := readInteger()
-		end := time.Now().UnixMilli()
-		thinkingTime += (int)(end - start)
 		if answer == task.Result() {
-			fmt.Printf("Richtig!\n")
-			return wrongAnswers, thinkingTime
+			return
 		}
-		fmt.Printf("Falsch! %s", task.Challenge())
-		wrongAnswers++
+		fmt.Println("Wrong!!! Repeat ...")
+		*mistakes++
 	}
-}
-
-func showStatistics(count, wrongAnswers int, thinkingTime float64) {
-	if wrongAnswers > 0 {
-		fmt.Printf("Du hast %d mal falsch geantwortet und ", wrongAnswers)
-	} else {
-		fmt.Printf("Alles richtig! Du ")
-	}
-	fmt.Printf("hast für %d Rechenaufgaben %.1f Sekunden nachgedacht!\n", count, float64(thinkingTime)/1000.0)
 }
 
 func readInteger() int {
