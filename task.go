@@ -4,7 +4,22 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"slices"
 )
+
+func ValidOperations() []string {
+	return []string{"+", "-", "x", "/"}
+}
+
+func CheckOperations(operations []string) error {
+	validOperations := ValidOperations()
+	for _, operation := range operations {
+		if !slices.Contains(validOperations, operation) {
+			return fmt.Errorf("invalid operation '%s'", operation)
+		}
+	}
+	return nil
+}
 
 type Task interface {
 	Challenge() string
@@ -26,8 +41,8 @@ func (this *taskImpl) Result() int {
 	return this.result
 }
 
-func NewTask(limit int) Task {
-	operation := randomOperation()
+func NewTask(limit int, operations []string) Task {
+	operation := randomOperation(operations)
 	return NewTaskWithOperation(operation, limit)
 }
 
@@ -37,29 +52,28 @@ func NewTaskWithOperation(operation string, limit int) Task {
 		return newAdditionTask(limit)
 	case "-":
 		return newSubtractionTask(limit)
-	case "*", "x":
+	case "x":
 		return newMultiplicationTask(limit)
-	case "/", ":":
+	case "/":
 		return newDivisionTask(limit)
 	default:
 	}
 	panic(fmt.Sprintf("unknown operation '%s'", operation))
 }
 
-func randomOperation() string {
-	ops := []string{"+", "-", "x", "/"}
-	return ops[rand.Intn(len(ops))]
+func randomOperation(operations []string) string {
+	return operations[rand.Intn(len(operations))]
 }
 
 func newAdditionTask(limit int) *taskImpl {
 	result := randomNumber(4, limit)
-	number1 := randomNumber(2, result - 2)
+	number1 := randomNumber(2, result-2)
 	number2 := result - number1
 	return &taskImpl{number1: number1, operation: "+", number2: number2, result: result}
 }
 
 func randomNumber(min, max int) int {
-	return min + rand.Intn(max + 1 - min)
+	return min + rand.Intn(max+1-min)
 }
 
 func newSubtractionTask(limit int) *taskImpl {

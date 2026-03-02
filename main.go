@@ -14,12 +14,23 @@ import (
 func main() {
 	count := pflag.IntP("count", "c", 20, "Number of problems to generate and solve.")
 	limit := pflag.IntP("limit", "l", 100, "Maximum number used in generated problems.")
+	operationsString := pflag.StringP("operations", "o", "+-x/", "Available math operations.")
 	pflag.Parse()
+
+	operations := make([]string, 0, len(*operationsString))
+	for _, r := range *operationsString {
+		operations = append(operations, string(r))
+	}
+	error := CheckOperations(operations)
+	if error != nil {
+		fmt.Println(error.Error())
+		return
+	}
 
 	mistakes := 0
 	startTime := time.Now().UnixMilli()
 	for range *count {
-		handleTask(*limit, &mistakes)
+		handleTask(*limit, operations, &mistakes)
 	}
 	endTime := time.Now().UnixMilli()
 
@@ -27,8 +38,8 @@ func main() {
 	fmt.Printf("You have made %d mistakes.\n", mistakes)
 }
 
-func handleTask(limit int, mistakes *int) {
-	task := NewTask(limit)
+func handleTask(limit int, operations []string, mistakes *int) {
+	task := NewTask(limit, operations)
 	for {
 		fmt.Print(task.Challenge())
 		answer := readInteger()

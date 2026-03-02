@@ -8,23 +8,34 @@ import (
 const limit = 100
 const invocations = 1000
 
+func TestCheckOperations(t *testing.T) {
+	if CheckOperations(ValidOperations()) != nil {
+		t.Errorf("correct operation is considered invalid")
+	}
+	if CheckOperations([]string{":"}) == nil {
+		t.Errorf("invalid operation has not been detected")
+	}
+}
+
 func TestNewTask(t *testing.T) {
+	operations := []string{"+", "-", "x", "/"}
 	for range invocations {
-		task := NewTask(limit)
+		task := NewTask(limit, operations)
 		assertLimits(t, limit, task.(*taskImpl))
-		assertValidOperation(t, task.(*taskImpl).operation)
+		assertValidOperation(t, task.(*taskImpl).operation, operations)
 	}
 }
 
 func TestRandomOperation(t *testing.T) {
+	operations := []string{"+", "-", "x", "/"}
 	for range invocations {
-		operation := randomOperation()
-		assertValidOperation(t, operation)
+		operation := randomOperation(operations)
+		assertValidOperation(t, operation, operations)
 	}
 }
 
-func assertValidOperation(t *testing.T, operation string) {
-	if !slices.Contains([]string{"+", "-", "x", "/"}, operation) {
+func assertValidOperation(t *testing.T, operation string, validOperations []string) {
+	if !slices.Contains(validOperations, operation) {
 		t.Fatalf("invalid operation '%s'", operation)
 	}
 }
