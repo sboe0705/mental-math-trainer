@@ -35,7 +35,7 @@ func main() {
 	endTime := time.Now().UnixMilli()
 	
 	duration := (endTime-startTime)/1000
-	durationPerTask := float64(duration)/*count
+	durationPerTask := float64(duration)/float64(*count)
 
 	fmt.Printf("You solved %d tasks in %d seconds (%.1f seconds per task)!\n", *count, duration, durationPerTask)
 	fmt.Printf("You have made %d mistakes.\n", mistakes)
