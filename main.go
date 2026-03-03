@@ -38,7 +38,7 @@ func main() {
 	avgTime := float64(totalTime)/float64(*count)
 	errorRate := float64(errors)/float64(*count)
 	effectiveTime := avgTime*(1+errorRate*2)
-	score := 1000/effectiveTime
+	score := int(1000/effectiveTime)
 
 	fmt.Printf("You solved %d tasks in %d seconds (%.1f seconds per task)!\n", *count, totalTime, avgTime)
 	fmt.Printf("You have made %d errors.\n", errors)
