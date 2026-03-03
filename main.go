@@ -41,7 +41,9 @@ func main() {
 	score := int(1000/effectiveTime)
 
 	fmt.Printf("You solved %d tasks in %d seconds (%.1f seconds per task)!\n", *count, totalTime, avgTime)
-	fmt.Printf("You have made %d errors.\n", errors)
+	if errors > 0 {
+		fmt.Printf("You have made %d errors.\n", errors)
+	}
 	fmt.Printf("Your score: %d\n", score)
 }
 
