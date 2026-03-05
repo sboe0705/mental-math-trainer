@@ -33,12 +33,12 @@ func main() {
 		handleTask(*limit, operations, &errors)
 	}
 	endTime := time.Now().UnixMilli()
-	
-	totalTime := (endTime-startTime)/1000
-	avgTime := float64(totalTime)/float64(*count)
-	errorRate := float64(errors)/float64(*count)
-	effectiveTime := avgTime*(1+errorRate*2)
-	score := int(1000/effectiveTime)
+
+	totalTime := (endTime - startTime) / 1000
+	avgTime := float64(totalTime) / float64(*count)
+	errorRate := float64(errors) / float64(*count)
+	effectiveTime := avgTime * (1 + errorRate*2)
+	score := int(1000 / effectiveTime)
 
 	fmt.Printf("You solved %d tasks in %d seconds (%.1f seconds per task)!\n", *count, totalTime, avgTime)
 	if errors > 0 {
